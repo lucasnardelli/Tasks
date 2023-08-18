@@ -1,14 +1,30 @@
 import React, {Component} from "react"
-import { SafeAreaView, Text, ImageBackground, StyleSheet, View } from 'react-native'
+import { SafeAreaView, Text, ImageBackground, StyleSheet, View, FlatList } from 'react-native'
 
 import commonStyles from '../commonStyles.js'
 import todayImage from '../../assets/imgs/today.jpg'
 
+import Task from '../components/Task.js'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 
 
 export default class TaskList extends Component {
+
+    state = {
+        tasks: [{
+            id: Math.random(),
+            desc: 'Comprar Licvro de React Native',
+            estimateAt: new Date(),
+            doneAt: new Date(),
+        }, {
+            id: Math.random(),
+            desc: 'Ler Licvro de React Native',
+            estimateAt: new Date(),
+            doneAt: null,
+        }]
+    }
+
     render (){
         const today = moment().locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')
         return(
@@ -21,9 +37,11 @@ export default class TaskList extends Component {
                     </View>
                 </ImageBackground>
                 <View style={styles.taskList}>
-                    <Text>Tarefa #01</Text>
-                    <Text>Tarefa #02</Text>
-                    <Text>Tarefa #03</Text>
+                    <FlatList data={this.state.tasks}
+                        keyExtractor={item => `${item.id}`}
+                        renderItem={({item}) => <Task {...item} />} 
+                    />
+
                 </View>
                 
             </SafeAreaView>
