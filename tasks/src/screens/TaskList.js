@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import { SafeAreaView, Text, ImageBackground, StyleSheet, View, FlatList, TouchableOpacity, Platform } from 'react-native'
+import { SafeAreaView, Text, ImageBackground, StyleSheet, View, FlatList, TouchableOpacity, Platform, Alert } from 'react-native'
 
 import commonStyles from '../commonStyles.js'
 import todayImage from '../../assets/imgs/today.jpg'
@@ -63,12 +63,30 @@ export default class TaskList extends Component {
         this.setState({visibleTasks})
     }
 
+    addTask = (newTask) => {
+        if (!newTask.desc.trim() || !newTask.desc){
+            Alert.alert('Dados Inválidos', 'Descrição não informada')
+            return 
+        }
+
+        const tasks = [...this.state.tasks]
+        tasks.push({
+            id: Math.random(),
+            desc: newTask.desc,
+            estimateAt: newTask.date,
+            doneAt: null
+        })
+
+        this.setState({ tasks, showAddTask: false }, this.filterTasks)
+    }
+
     render (){
         const today = moment().locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')
         return(
             <SafeAreaView style={styles.container}>
                 <AddTask isVisible={this.state.showAddTask} 
-                onCancel={() => this.setState({ showAddTask: false })}/>
+                onCancel={() => this.setState({ showAddTask: false })}
+                onSave={this.addTask}/>
                 <ImageBackground source={todayImage}
                     style={styles.background}>
                     <View style={styles.iconBar}>
