@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         borderRadius: 13,
-        backgroundColor: "#4D7031",
+        backgroundColor: '#4D7031',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     },
     excludeText: {
         fontFamily: commonStyles.fontFamily,
-        color: 'FFF',
+        color: '#FFF',
         fontSize: 20,
         margin: 10
     },
