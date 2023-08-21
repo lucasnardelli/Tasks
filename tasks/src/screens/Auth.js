@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { ImageBackground, Text, StyleSheet, View, TextInput, TouchableOpacity, Platform, Alert } from "react-native";
+import { ImageBackground, Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 
 import backGroundImage from '../../assets/imgs/login.jpg'
 import commonStyles from '../commonStyles'
+import AuthInput from '../components/AuthInput'
 
 export default class Auth extends Component {
 
@@ -15,7 +16,7 @@ export default class Auth extends Component {
     }
 
     singinOrSingup = () => {
-        if(relativeTimeThreshold.state.stageNew) {
+        if(this.state.stageNew) {
             Alert.alert('sucesso', 'Criar conta')
         } else {
             Alert.alert('sucesso', 'logar')
@@ -30,24 +31,24 @@ export default class Auth extends Component {
                     <Text style={styles.subTitle}>{this.state.stageNew ? 'Crie a sua conta' : 'Informe seus dados'}</Text>
                     {
                         this.state.stageNew &&
-                        <TextInput placeholder="Nome" 
+                        <AuthInput icon='user' placeholder="Nome" 
                             value={this.state.name} 
                             style={styles.input} 
                             onChangeText={name => this.setState({ name })} />
 
                     }
-                    <TextInput placeholder="E-mail" 
+                    <AuthInput icon='at' placeholder="E-mail" 
                         value={this.state.email} 
                         style={styles.input} 
                         onChangeText={email => this.setState({ email })} />
-                    <TextInput placeholder="Senha" 
+                    <AuthInput icon='lock' placeholder="Senha" 
                         value={this.state.password} 
                         style={styles.input} 
                         onChangeText={password => this.setState({ password })} 
                         secureTextEntry={true}/>
                     {
                         this.state.stageNew &&
-                        <TextInput placeholder="Confirme sua senha" 
+                        <AuthInput icon='asterisk' placeholder="Confirme sua senha" 
                             value={this.state.confirmPassword} 
                             style={styles.input} 
                             onChangeText={confirmPassword => this.setState({ confirmPassword })} 
@@ -97,14 +98,14 @@ const styles = StyleSheet.create({
     },
     input: {
         backgroundColor: '#FFF',
-        padding: Platform.OS == 'ios' ? 15 : 10,
         marginTop: 10,
     },
     button: {
         backgroundColor: '#080',
         marginTop: 10,
         padding: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 7
     },
     buttonText: {
         fontFamily: commonStyles.fontFamily,
