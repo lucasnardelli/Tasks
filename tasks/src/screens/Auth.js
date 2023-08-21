@@ -11,8 +11,8 @@ import { server, showError, showSuccess } from '../common'
 
 const initialState = {
     name: '',
-    email: '',
-    password: '',
+    email: 'lucas@gmail.com',
+    password: '123456',
     confirmPassword: '',
     stageNew: false
 }
@@ -27,13 +27,13 @@ export default class Auth extends Component {
         if(this.state.stageNew) {
             this.singup()
         } else {
-            Alert.alert('sucesso', 'logar')
+            this.signin()
         }
     }
 
     singup = async () => {
         try{
-            await axios.post(`${server}/singup`, {
+            await axios.post(`${server}/signup`, {
                 name: this.state.name,
                 email: this.state.email,
                 password: this.state.password,
@@ -47,7 +47,32 @@ export default class Auth extends Component {
         }
     }
 
+    signin = async () => {
+        try {
+            const res = await axios.post(`${server}/signin`,{
+                email: this.state.email,
+                password: this.state.password,
+            })
+
+            axios.defaults.headers.common['Authorization'] = `bearer ${res.data.token}`
+            this.props.navigation.navigate('Home')
+        } catch (e) {
+            showError(e)
+        }
+    }
+
     render () {
+        const validations = []
+        validations.push(this.state.email && this.state.email.includes('@'))
+        validations.push(this.state.password && this.state.password.length >= 6)
+
+        if(this.state.stageNew) {
+            validations.push(this.state.name && this.state.name.trim().length >= 3)
+            validations.push(this.state.password === this.state.confirmPassword)
+        }
+
+        const validForm = validations.reduce((total, atual) => total && atual)
+
         return (
             <ImageBackground source={backGroundImage} style={styles.background}>
                 <Text style={styles.title}>Tasks</Text>
@@ -79,8 +104,9 @@ export default class Auth extends Component {
                             secureTextEntry={true}/>
                     }
 
-                    <TouchableOpacity onPress={this.singinOrSingup}>
-                        <View style={styles.button}>
+                    <TouchableOpacity onPress={this.singinOrSingup}
+                        disabled={!validForm}>
+                        <View style={[styles.button, validForm? {} : { backgroundColor: '#AAA' }]}>
                             <Text style={styles.buttonText}>{this.state.stageNew ? 'Registrar' : 'Entrar'}</Text>
                         </View>
                     </TouchableOpacity>
