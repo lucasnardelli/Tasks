@@ -5,7 +5,7 @@ module.exports = app => {
         const date = req.query.date ? req.query.date
             : moment().endOf('day').toDate()
 
-        app.bd('tasks')
+        app.db('tasks')
             .where({ userId: req.user.id })
             .where('estimateAt', '<=', date)
             .orderBy('estimateAt')
@@ -43,13 +43,13 @@ module.exports = app => {
     const updateTaskDoneAt = (req, res, doneAt) => {
         app.db('tasks')
             .where({ id: req.params.id, userId: req.user.id})
-            .update({doneAt})
+            .update({ doneAt })
             .then(_ => res.status(204).send())
             .catch(err => res.status(400).json(err))
     }
 
     const toggleTask = (req, res) => {
-        app.db('task')
+        app.db('tasks')
             .where({id: req.params.id, userId: req.user.id})
             .first()
             .then(task => {
@@ -65,5 +65,5 @@ module.exports = app => {
             .catch(err => res.status(400).json(err))
     }
 
-    return { getTasks, save, remove, toggleTask }
+    return { getTasks, save, remove, toggleTask}
 }

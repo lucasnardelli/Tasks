@@ -1,25 +1,49 @@
 import React, { Component } from "react";
 import { ImageBackground, Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 
+import axios from 'axios'
+
 import backGroundImage from '../../assets/imgs/login.jpg'
 import commonStyles from '../commonStyles'
 import AuthInput from '../components/AuthInput'
 
+import { server, showError, showSuccess } from '../common'
+
+const initialState = {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    stageNew: false
+}
+
 export default class Auth extends Component {
 
     state = {
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        stageNew: false
+        ...initialState
     }
 
     singinOrSingup = () => {
         if(this.state.stageNew) {
-            Alert.alert('sucesso', 'Criar conta')
+            this.singup()
         } else {
             Alert.alert('sucesso', 'logar')
+        }
+    }
+
+    singup = async () => {
+        try{
+            await axios.post(`${server}/singup`, {
+                name: this.state.name,
+                email: this.state.email,
+                password: this.state.password,
+                confirmPassword: this.state.confirmPassword,
+            })
+
+            showSuccess('Usuário cadastrado')
+            this.setState({ ...initialState })
+        } catch(e) {
+            showError(e)
         }
     }
 

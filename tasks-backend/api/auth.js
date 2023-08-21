@@ -3,7 +3,7 @@ const jwt = require('jwt-simple')
 const bcrypt = require ('bcrypt-nodejs')
 
 module.exports = app => {
-    const singin = async (req, res) => {
+    const signin = async (req, res) => {
         if (!req.body.email || !req.body.password) {
             return res.status(400).send('Dados incompletos')
         }
@@ -13,7 +13,7 @@ module.exports = app => {
             .first()
 
         if (user) {
-            bcrypt.compare(re.body.password, user.password, (err, isMatch) => {
+            bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
                 if (err || !isMatch){
                     return res.status(401).send('Senha inválida')
                 }
@@ -29,5 +29,5 @@ module.exports = app => {
             res.status(400).send('Email não cadastrado')
         }
     }
-    return { singin }
+    return { signin }
 }
