@@ -1,6 +1,7 @@
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 import TaskList from './screens/TaskList'
+import Home from './Drawer'
 import Auth from './screens/Auth'
 
 const mainRoutes = {
@@ -10,7 +11,7 @@ const mainRoutes = {
     },
     Home: {
         name: 'Home',
-        screen: TaskList
+        screen: Home
     }
 }
 
